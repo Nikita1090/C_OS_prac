@@ -1,0 +1,85 @@
+#include <stdio.h>
+
+
+int ones_counter(char *a, int len, int n, int *ret_maxlen)
+{
+    char mask = 128;
+    char buf;
+    int max_len_ones = 0;
+    char p = 0;
+    int curr_len_ones = 0;
+    int count_more_then_n = 0;
+    for (int i = 0; i < len; i++)
+    {
+        buf = *(a + i);
+        for (int j = 0; j < 8; j++)
+        {
+            p = mask & buf;
+            if (p == 0)
+            {
+                if (max_len_ones < curr_len_ones)
+                {
+                    max_len_ones = curr_len_ones;
+                }
+                if (curr_len_ones >= n)
+                {
+                    count_more_then_n++;
+                }
+                curr_len_ones = 0;
+            }
+            else
+            {
+                curr_len_ones++;
+            }
+            buf <<= 1;
+        }
+    }
+	if (max_len_ones < curr_len_ones)
+                {
+                    max_len_ones = curr_len_ones;
+                }
+                if (curr_len_ones >= n)
+                {
+                    count_more_then_n++;
+                }
+    (*ret_maxlen) = max_len_ones;
+    return count_more_then_n;
+    
+}
+
+void binar_outchar(char n)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        if (n & 128)
+        {
+            printf("1");
+        }
+        else
+        {
+            printf("0");
+        }
+        n <<= 1;
+    }
+    printf("\n");
+}
+
+int main(void)
+{
+    char arr[100];
+    int len;
+    int n;
+    scanf("%d", &len);
+    scanf("%d", &n);
+    scanf("%s%n", arr, &len);
+    len--;
+    for (int i = 0; i < len; i++)
+    {
+        binar_outchar(arr[i]);
+    }
+    int max_len;
+    int *pointer = &max_len; 
+    int count_ones = ones_counter(arr, len, n, pointer);
+    printf("\n\t%d %d", count_ones, max_len);
+    return 0;
+}
